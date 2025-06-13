@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const cells = row.querySelectorAll('td');
             cells.forEach((cell, index) => {
                 if (index > 0) {
-                    const score = parseInt(cell.textContent, 10);
+                    const score = parseInt(cell.textContent.trim(), 10);
                     if (!isNaN(score)) {
                         totals[index - 1] += score;
                     }
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cells = row.querySelectorAll('td');
         cells.forEach((cell, index) => {
             if (index > 0) {
-                cell.contentEditable = true;
+                cell.setAttribute('contenteditable', 'true');
                 cell.addEventListener('input', updateTotals);
             }
         });
