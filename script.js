@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const cells = document.querySelectorAll('td');
     const rounds = ['King', 'Queen', 'Jack', '10', '9', '8', '7', '6', '5', '4', '3', '2', 'Ace'];
     let currentRoundIndex = 0;
 
@@ -9,37 +8,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateTotals = () => {
         const totals = [0, 0, 0, 0, 0];
-        cells.forEach((cell, index) => {
-            if (index % 6 !== 0) {
-                const score = parseInt(cell.textContent, 10);
-                if (!isNaN(score)) {
-                    totals[(index % 6) - 1] += score;
+        const rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            cells.forEach((cell, index) => {
+                if (index > 0) {
+                    const score = parseInt(cell.textContent, 10);
+                    if (!isNaN(score)) {
+                        totals[index - 1] += score;
+                    }
                 }
-            }
+            });
         });
+
         totals.forEach((total, index) => {
             document.getElementById(`total-player${index + 1}`).textContent = total;
         });
     };
 
-    const resetScores = () => {
-        cells.forEach(cell => {
-            cell.textContent = '';
-        });
-        updateTotals();
-    };
-
-    cells.forEach(cell => {
-        cell.addEventListener('click', () => {
-            const score = prompt('Enter score:');
-            if (score !== null) {
-                cell.textContent = score;
-                updateTotals();
+    // Make score cells editable
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        cells.forEach((cell, index) => {
+            if (index > 0) {
+                cell.contentEditable = true;
+                cell.addEventListener('input', updateTotals);
             }
         });
     });
 
-    document.getElementById('reset-scores').addEventListener('click', resetScores);
+    document.getElementById('reset-scores').addEventListener('click', () => {
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            cells.forEach((cell, index) => {
+                if (index > 0) cell.textContent = '';
+            });
+        });
+        updateTotals();
+    });
 
     updateCurrentRound();
 });
