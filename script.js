@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateCurrentRound = () => {
         document.getElementById('current-round').textContent = `Current Round: ${rounds[currentRoundIndex]}`;
+        highlightCurrentRound();
     };
 
     const updateTotals = () => {
@@ -27,7 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // Make score cells editable
+    const highlightCurrentRound = () => {
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach((row, index) => {
+            row.classList.toggle('highlight', index === currentRoundIndex);
+        });
+    };
+
     const rows = document.querySelectorAll('tbody tr');
     rows.forEach(row => {
         const cells = row.querySelectorAll('td');
@@ -47,6 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
         updateTotals();
+    });
+
+    document.getElementById('next-round').addEventListener('click', () => {
+        if (currentRoundIndex < rounds.length - 1) {
+            currentRoundIndex++;
+            updateCurrentRound();
+        } else {
+            alert("You've reached the final round (Ace).");
+        }
     });
 
     updateCurrentRound();
