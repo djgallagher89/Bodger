@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentRoundIndex = 0;
 
     const updateCurrentRound = () => {
-        document.getElementById('current-round').textContent = `Current Round: ${rounds[currentRoundIndex]}`;
+        document.getElementById('current-round').textContent = `Bodger is: ${rounds[currentRoundIndex]}`;
         highlightCurrentRound();
     };
 
