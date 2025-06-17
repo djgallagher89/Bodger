@@ -57,13 +57,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('next-round').addEventListener('click', () => {
-        if (currentRoundIndex < rounds.length - 1) {
-            currentRoundIndex++;
-            updateCurrentRound();
-        } else {
-            alert("You've reached the final round (Ace).");
-        }
-    });
+    currentRoundIndex = (currentRoundIndex + 1) % rounds.length;
+    updateCurrentRound();
+});
 
     updateCurrentRound();
 });
