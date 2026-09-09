@@ -140,20 +140,21 @@ for (let i = 1; i <= 5; i++) {
     updateCurrentRound();
 });
 
-document.getElementById('clear-all').addEventListener('click', () => {
-    if (confirm('Are you sure you want to clear all data and start fresh?')) {
-        localStorage.removeItem(STORAGE_KEY);
-        location.reload();
-    }
-});
+    document.getElementById('clear-all').addEventListener('click', () => {
+        if (confirm('Are you sure you want to clear all data and start fresh?')) {
+            localStorage.removeItem(STORAGE_KEY);
+            location.reload();
+        }
+    });
+    
     // Load game state on page load
-loadGameState();
-updateCurrentRound();
-updateTotals();
-
-// Auto-save game state every 10 seconds
-setInterval(saveGameState, 10000);
-
-// Save game state before unload
-window.addEventListener('beforeunload', saveGameState);
+    loadGameState();
+    updateCurrentRound();
+    updateTotals();
+    
+    // Auto-save game state every 10 seconds
+    setInterval(saveGameState, 10000);
+    
+    // Save game state before unload
+    window.addEventListener('beforeunload', saveGameState);
 });
