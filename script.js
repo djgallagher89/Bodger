@@ -73,6 +73,7 @@ const saveGameState = () => {
     const updateCurrentRound = () => {
         document.getElementById('current-round').textContent = `Bodger is: ${rounds[currentRoundIndex]}`;
         highlightCurrentRound();
+        saveGameState();
     };
 
     const updateTotals = () => {
