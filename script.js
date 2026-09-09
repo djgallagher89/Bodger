@@ -123,6 +123,7 @@ const saveGameState = () => {
             });
         });
         updateTotals();
+        saveGameState();
     });
 
     document.getElementById('next-round').addEventListener('click', () => {
