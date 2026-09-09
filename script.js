@@ -140,6 +140,12 @@ for (let i = 1; i <= 5; i++) {
     updateCurrentRound();
 });
 
+document.getElementById('clear-all').addEventListener('click', () => {
+    if (confirm('Are you sure you want to clear all data and start fresh?')) {
+        localStorage.removeItem(STORAGE_KEY);
+        location.reload();
+    }
+});
     // Load game state on page load
 loadGameState();
 updateCurrentRound();
