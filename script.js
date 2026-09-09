@@ -14,6 +14,12 @@ const loadGameState = () => {
         }
     }
     
+    // Always clear score inputs first
+    const scoreInputs = document.querySelectorAll('.score-input');
+    scoreInputs.forEach(input => {
+        input.value = '';
+    });
+    
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
         try {
@@ -29,17 +35,12 @@ const loadGameState = () => {
             }
             
             // Restore scores
-            const rows = document.querySelectorAll('tbody tr');
-            rows.forEach((row, rowIndex) => {
-                const cells = row.querySelectorAll('td');
-                cells.forEach((cell, colIndex) => {
-                    if (colIndex > 0) {
-                        const key = `row${rowIndex}-col${colIndex}`;
-                        if (state[key]) {
-                            cell.textContent = state[key];
-                        }
-                    }
-                });
+            const scoreInputs = document.querySelectorAll('.score-input');
+            scoreInputs.forEach((input, index) => {
+                const key = `score${index}`;
+                if (state[key]) {
+                    input.value = state[key];
+                }
             });
             
             console.log('Game state loaded from localStorage');
@@ -69,15 +70,12 @@ const saveGameState = () => {
     }
     
     // Save scores
-    const rows = document.querySelectorAll('tbody tr');
-    rows.forEach((row, rowIndex) => {
-        const cells = row.querySelectorAll('td');
-        cells.forEach((cell, colIndex) => {
-            if (colIndex > 0 && cell.textContent.trim()) {
-                const key = `row${rowIndex}-col${colIndex}`;
-                state[key] = cell.textContent.trim();
-            }
-        });
+    const scoreInputs = document.querySelectorAll('.score-input');
+    scoreInputs.forEach((input, index) => {
+        if (input.value.trim()) {
+            const key = `score${index}`;
+            state[key] = input.value;
+        }
     });
     
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -92,18 +90,14 @@ const saveGameState = () => {
 
     const updateTotals = () => {
         const totals = [0, 0, 0, 0, 0];
-        const rows = document.querySelectorAll('tbody tr');
+        const scoreInputs = document.querySelectorAll('.score-input');
 
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            cells.forEach((cell, index) => {
-                if (index > 0) {
-                    const score = parseInt(cell.textContent.trim(), 10);
-                    if (!isNaN(score)) {
-                        totals[index - 1] += score;
-                    }
-                }
-            });
+        scoreInputs.forEach((input, index) => {
+            const playerIndex = index % 5;
+            const score = parseInt(input.value, 10);
+            if (!isNaN(score)) {
+                totals[playerIndex] += score;
+            }
         });
 
         totals.forEach((total, index) => {
@@ -119,33 +113,11 @@ const saveGameState = () => {
         });
     };
 
-    const rows = document.querySelectorAll('tbody tr');
-    rows.forEach(row => {
-        const cells = row.querySelectorAll('td');
-        cells.forEach((cell, index) => {
-            if (index > 0) {
-                cell.setAttribute('contenteditable', 'true');
-                
-                // Validate numeric input only (positive numbers)
-                cell.addEventListener('beforeinput', (e) => {
-                    const char = e.data;
-                    // Allow null (for deletions), digits, and allow paste/cut operations
-                    if (char && !/^\d$/.test(char)) {
-                        e.preventDefault();
-                    }
-                });
-                
-                // Handle paste events to filter out non-numeric content
-                cell.addEventListener('paste', (e) => {
-                    e.preventDefault();
-                    const pastedText = (e.clipboardData || window.clipboardData).getData('text');
-                    const numericOnly = pastedText.replace(/\D/g, '');
-                    document.execCommand('insertText', false, numericOnly);
-                });
-                
-                cell.addEventListener('input', updateTotals);
-            }
-        });
+    // Set up event listeners for all score inputs
+    const scoreInputs = document.querySelectorAll('.score-input');
+    scoreInputs.forEach(input => {
+        input.addEventListener('input', updateTotals);
+        input.addEventListener('change', saveGameState);
     });
 
    // Player name input tracking
@@ -157,11 +129,9 @@ for (let i = 1; i <= 5; i++) {
 }
  document.getElementById('reset-scores').addEventListener('click', () => {
     if (confirm('Are you sure you want to reset all scores?')) {  
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            cells.forEach((cell, index) => {
-                if (index > 0) cell.textContent = '';
-            });
+        const scoreInputs = document.querySelectorAll('.score-input');
+        scoreInputs.forEach(input => {
+            input.value = '';
         });
         updateTotals();
     }  
