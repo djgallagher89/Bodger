@@ -140,5 +140,14 @@ for (let i = 1; i <= 5; i++) {
     updateCurrentRound();
 });
 
-    updateCurrentRound();
+    // Load game state on page load
+loadGameState();
+updateCurrentRound();
+updateTotals();
+
+// Auto-save game state every 10 seconds
+setInterval(saveGameState, 10000);
+
+// Save game state before unload
+window.addEventListener('beforeunload', saveGameState);
 });
