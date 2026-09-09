@@ -5,18 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bodger Scorecard</title>
     <link rel="stylesheet" href="styles.css">
-<link rel="manifest" href="manifest.json">
-<script>
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js')
-        .then(function() {
-            console.log('Service Worker Registered');
-        });
-    }
-</script>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="A scorecard app for tracking scores in the card game Bodger">
+    <meta name="apple-mobile-web-app-title" content="Bodger">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+            .then(function() {
+                console.log('Service Worker Registered');
+            })
+            .catch(function(error) {
+                console.log('Service Worker registration failed:', error);
+            });
+        }
+    </script>
     <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
 </head>
 <body>
     <h1>Bodger Scorecard</h1>
@@ -60,6 +66,7 @@
     </table>
     <button id="reset-scores">Reset Scores</button>
 <button id="next-round">Next Round</button>
+   <button id="clear-all">Clear All Data</button> 
     <script src="script.js"></script>
 </body>
 </html>
