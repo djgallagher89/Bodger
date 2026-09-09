@@ -122,8 +122,9 @@ for (let i = 1; i <= 5; i++) {
     if (input) {
         input.addEventListener('change', saveGameState);
     }
-} document.getElementById('reset-scores').addEventListener('click', () => {
-    if (confirm('Are you sure you want to reset all scores?')) {  //
+}
+ document.getElementById('reset-scores').addEventListener('click', () => {
+    if (confirm('Are you sure you want to reset all scores?')) {  
         rows.forEach(row => {
             const cells = row.querySelectorAll('td');
             cells.forEach((cell, index) => {
@@ -131,7 +132,7 @@ for (let i = 1; i <= 5; i++) {
             });
         });
         updateTotals();
-    }  //
+    }  
 });
 
     document.getElementById('next-round').addEventListener('click', () => {
