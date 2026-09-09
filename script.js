@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const rounds = ['King', 'Queen', 'Jack', '10', '9', '8', '7', '6', '5', '4', '3', '2', 'Ace'];
     let currentRoundIndex = 0;
 const STORAGE_KEY = 'bodger-game-state';
+let isClearing = false;
 
 // Load game state from localStorage
 const loadGameState = () => {
@@ -42,6 +43,11 @@ const loadGameState = () => {
 
 // Save game state to localStorage
 const saveGameState = () => {
+    // Don't save if we're in the process of clearing
+    if (isClearing) {
+        return;
+    }
+    
     const state = {
         currentRoundIndex: currentRoundIndex,
     };
@@ -142,6 +148,7 @@ for (let i = 1; i <= 5; i++) {
 
     document.getElementById('clear-all').addEventListener('click', () => {
         if (confirm('Are you sure you want to clear all data and start fresh?')) {
+            isClearing = true;
             localStorage.removeItem(STORAGE_KEY);
             // Clear all service worker caches before reloading
             if ('caches' in window) {
@@ -165,6 +172,6 @@ for (let i = 1; i <= 5; i++) {
     // Auto-save game state every 10 seconds
     setInterval(saveGameState, 10000);
     
-    // Save game state before unload
+    // Save game state before unload (but not during clearing)
     window.addEventListener('beforeunload', saveGameState);
 });
