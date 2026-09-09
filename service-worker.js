@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bodger-v1';
+const CACHE_NAME = 'bodger-v2';
 const urlsToCache = [
   './',
   './index.html',
