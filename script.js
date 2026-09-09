@@ -1,6 +1,74 @@
 document.addEventListener('DOMContentLoaded', () => {
     const rounds = ['King', 'Queen', 'Jack', '10', '9', '8', '7', '6', '5', '4', '3', '2', 'Ace'];
     let currentRoundIndex = 0;
+const STORAGE_KEY = 'bodger-game-state';
+
+// Load game state from localStorage
+const loadGameState = () => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        try {
+            const state = JSON.parse(saved);
+            currentRoundIndex = state.currentRoundIndex || 0;
+            
+            // Restore player names
+            for (let i = 1; i <= 5; i++) {
+                const input = document.getElementById(`player${i}`);
+                if (input && state[`player${i}`]) {
+                    input.value = state[`player${i}`];
+                }
+            }
+            
+            // Restore scores
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach((row, rowIndex) => {
+                const cells = row.querySelectorAll('td');
+                cells.forEach((cell, colIndex) => {
+                    if (colIndex > 0) {
+                        const key = `row${rowIndex}-col${colIndex}`;
+                        if (state[key]) {
+                            cell.textContent = state[key];
+                        }
+                    }
+                });
+            });
+            
+            console.log('Game state loaded from localStorage');
+        } catch (e) {
+            console.error('Error loading game state:', e);
+        }
+    }
+};
+
+// Save game state to localStorage
+const saveGameState = () => {
+    const state = {
+        currentRoundIndex: currentRoundIndex,
+    };
+    
+    // Save player names
+    for (let i = 1; i <= 5; i++) {
+        const input = document.getElementById(`player${i}`);
+        if (input && input.value.trim()) {
+            state[`player${i}`] = input.value;
+        }
+    }
+    
+    // Save scores
+    const rows = document.querySelectorAll('tbody tr');
+    rows.forEach((row, rowIndex) => {
+        const cells = row.querySelectorAll('td');
+        cells.forEach((cell, colIndex) => {
+            if (colIndex > 0 && cell.textContent.trim()) {
+                const key = `row${rowIndex}-col${colIndex}`;
+                state[key] = cell.textContent.trim();
+            }
+        });
+    });
+    
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    console.log('Game state saved to localStorage');
+};
 
     const updateCurrentRound = () => {
         document.getElementById('current-round').textContent = `Bodger is: ${rounds[currentRoundIndex]}`;
