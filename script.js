@@ -143,7 +143,17 @@ for (let i = 1; i <= 5; i++) {
     document.getElementById('clear-all').addEventListener('click', () => {
         if (confirm('Are you sure you want to clear all data and start fresh?')) {
             localStorage.removeItem(STORAGE_KEY);
-            location.reload();
+            // Clear all service worker caches before reloading
+            if ('caches' in window) {
+                caches.keys().then(cacheNames => {
+                    cacheNames.forEach(cacheName => {
+                        caches.delete(cacheName);
+                    });
+                    location.reload();
+                });
+            } else {
+                location.reload();
+            }
         }
     });
     
