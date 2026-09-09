@@ -125,6 +125,24 @@ const saveGameState = () => {
         cells.forEach((cell, index) => {
             if (index > 0) {
                 cell.setAttribute('contenteditable', 'true');
+                
+                // Validate numeric input only (positive numbers)
+                cell.addEventListener('beforeinput', (e) => {
+                    const char = e.data;
+                    // Allow null (for deletions), digits, and allow paste/cut operations
+                    if (char && !/^\d$/.test(char)) {
+                        e.preventDefault();
+                    }
+                });
+                
+                // Handle paste events to filter out non-numeric content
+                cell.addEventListener('paste', (e) => {
+                    e.preventDefault();
+                    const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+                    const numericOnly = pastedText.replace(/\D/g, '');
+                    document.execCommand('insertText', false, numericOnly);
+                });
+                
                 cell.addEventListener('input', updateTotals);
             }
         });
