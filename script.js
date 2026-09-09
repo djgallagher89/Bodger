@@ -6,6 +6,14 @@ let isClearing = false;
 
 // Load game state from localStorage
 const loadGameState = () => {
+    // Always clear player names first
+    for (let i = 1; i <= 5; i++) {
+        const input = document.getElementById(`player${i}`);
+        if (input) {
+            input.value = '';
+        }
+    }
+    
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
         try {
