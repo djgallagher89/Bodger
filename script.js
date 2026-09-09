@@ -116,7 +116,13 @@ const saveGameState = () => {
         });
     });
 
-    document.getElementById('reset-scores').addEventListener('click', () => {
+   // Player name input tracking
+for (let i = 1; i <= 5; i++) {
+    const input = document.getElementById(`player${i}`);
+    if (input) {
+        input.addEventListener('change', saveGameState);
+    }
+} document.getElementById('reset-scores').addEventListener('click', () => {
     if (confirm('Are you sure you want to reset all scores?')) {  //
         rows.forEach(row => {
             const cells = row.querySelectorAll('td');
