@@ -94,8 +94,8 @@ const saveGameState = () => {
 
         totals.forEach((total, index) => {
             document.getElementById(`total-player${index + 1}`).textContent = total;
+       });
          saveGameState();
-        });
     };
 
     const highlightCurrentRound = () => {
